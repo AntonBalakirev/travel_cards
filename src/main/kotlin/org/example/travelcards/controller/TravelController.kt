@@ -2,6 +2,8 @@ package org.example.travelcards.controller
 
 import org.example.travelcards.model.entity.Travel
 import org.example.travelcards.repository.TravelRepository
+import org.example.travelcards.service.TravelService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,6 +16,7 @@ import java.util.UUID
 @RestController
 @RequestMapping("/travels")
 class TravelController(
+    private val travelService: TravelService,
     private val travelRepository: TravelRepository
 ) {
     @GetMapping
@@ -26,5 +29,8 @@ class TravelController(
     fun getTravel(@PathVariable id: UUID): Travel = travelRepository.findById(id).orElseThrow()
 
     @DeleteMapping("/{id}")
-    fun deleteTravel(@PathVariable id: UUID) = travelRepository.deleteById(id)
+    fun deleteTravel(@PathVariable id: UUID):ResponseEntity<Void> {
+        travelService.deleteTravelById(id)
+        return ResponseEntity.noContent().build()
+    }
 }

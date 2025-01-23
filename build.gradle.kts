@@ -17,8 +17,10 @@ dependencies {
     implementation("com.h2database:h2:2.2.224")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.json:json:20211205")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework:spring-test")
     testImplementation(kotlin("test"))
 }
 

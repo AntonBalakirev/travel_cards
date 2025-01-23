@@ -4,6 +4,8 @@ import org.example.travelcards.model.dto.CardRequest
 import org.example.travelcards.model.entity.Card
 import org.example.travelcards.repository.CardRepository
 import org.example.travelcards.repository.TravelRepository
+import org.example.travelcards.service.CardService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,8 +18,9 @@ import java.util.*
 @RestController
 @RequestMapping("/cards")
 class CardController(
+    private val cardService: CardService,
     private val cardRepository: CardRepository,
-    private val travelRepository: TravelRepository
+    private val travelRepository: TravelRepository,
 ) {
     @GetMapping
     fun getAllCards(): List<Card> = cardRepository.findAll()
@@ -40,5 +43,8 @@ class CardController(
     fun getCard(id: UUID): Card = cardRepository.findById(id).orElseThrow()
 
     @DeleteMapping("/{id}")
-    fun deleteCard(@PathVariable id: UUID) = cardRepository.deleteById(id)
+    fun deleteCard(@PathVariable id: UUID): ResponseEntity<Void> {
+        cardService.deleteCard(id)
+        return ResponseEntity.noContent().build()
+    }
 }
