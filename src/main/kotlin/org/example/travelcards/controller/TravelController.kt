@@ -1,5 +1,9 @@
 package org.example.travelcards.controller
 
+import jakarta.validation.Valid
+import org.example.travelcards.mappers.toResponse
+import org.example.travelcards.model.dto.TravelRequest
+import org.example.travelcards.model.dto.TravelResponse
 import org.example.travelcards.model.entity.Travel
 import org.example.travelcards.repository.TravelRepository
 import org.example.travelcards.service.TravelService
@@ -17,16 +21,24 @@ import java.util.UUID
 @RequestMapping("/travels")
 class TravelController(
     private val travelService: TravelService,
-    private val travelRepository: TravelRepository
+    private val travelRepository: TravelRepository,
 ) {
     @GetMapping
-    fun getAllTravels(): List<Travel> = travelRepository.findAll()
-
-    @PostMapping
-    fun createTravel(@RequestBody travel: Travel): Travel = travelRepository.save(travel)
+    fun getAllTravels(): List<TravelResponse> =
+        travelRepository.findAll().map { it.toResponse() }
 
     @GetMapping("/{id}")
-    fun getTravel(@PathVariable id: UUID): Travel = travelRepository.findById(id).orElseThrow()
+    fun getTravel(@PathVariable id: UUID): TravelResponse =
+        travelRepository.findById(id)
+            .orElseThrow{IllegalArgumentException("Travel not found for id: $id")}
+            .toResponse()
+
+    @PostMapping
+    fun createTravel(@Valid @RequestBody request: TravelRequest): TravelResponse {
+        val travel = Travel(name = request.name)
+        return travelRepository.save(travel)
+            .toResponse()
+    }
 
     @DeleteMapping("/{id}")
     fun deleteTravel(@PathVariable id: UUID):ResponseEntity<Void> {
