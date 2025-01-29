@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import java.util.*
 
-data class CardRequest(
+data class CardCreateRequest(
     @NotBlank(message = "Title is mandatory")
     @Size(max = 50, message = "Title must not exceed 50 characters")
     val title: String,

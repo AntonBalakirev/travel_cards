@@ -22,14 +22,14 @@ data class Card(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_id", nullable = false)
     @JsonIgnore
-    val travel: Travel? = null,
+    var travel: Travel? = null,
 
     @Column(nullable = false)
-    val title: String = "",
+    var title: String = "",
 
     @Column(nullable = true)
-    val description: String? = null,
+    var description: String? = null,
 
     @Column(nullable = true)
-    val mapLink: String? = null,
+    var mapLink: String? = null,
 )
